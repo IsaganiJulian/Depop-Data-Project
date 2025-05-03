@@ -29,6 +29,7 @@ This project automates the process of extracting, cleaning, and loading sales da
 └── README.md
 ```
 
+> **Note:** The `data/raw/` directory is excluded from version control to protect sensitive customer information. Please add your own raw CSV files to `data/raw/` to use this project.
 ## Getting Started
 
 ### Prerequisites
