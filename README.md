@@ -2,15 +2,17 @@
 
 ## Project Overview
 
-This project automates the process of extracting, cleaning, and loading sales data from CSV files into a SQLite database. It is designed for sales data exported from an online shop like Depop.
+Depop-ETL is an automated data engineering pipeline for extracting, cleaning, and loading sales data from CSV files into a SQLite database. Designed for e-commerce analytics, the project streamlines the process of preparing raw sales data (such as from Depop) for robust, SQL-based analysis and reporting.
 
 ## Features
 
-- Extracts data from multiple CSV files
-- Cleans and standardizes sales data
-- Loads data into a SQLite database for easy analysis
-- Modular code structure for easy maintenance
+- **Automated ETL Pipeline:** Extracts raw sales data from CSV, cleans and standardizes it, and loads it into a SQLite database with a single command.
+- **Comprehensive Data Cleaning:** Handles missing values, standardizes state names, converts data types, removes sensitive information, and eliminates duplicates using modular Python classes.
+- **Database Integration:** Loads cleaned data into a normalized SQLite database (`sales.db`), enabling efficient SQL queries and downstream analytics.
+- **Reproducible & Documented:** Modular code structure, clear documentation, and version control with Git for easy maintenance and collaboration.
+- **Analysis-Ready:** Supports Jupyter notebook-based exploration and reporting on the processed data.
 
+---
 ## Project Structure
 ```
 ├── config/ # Configuration files
@@ -30,6 +32,7 @@ This project automates the process of extracting, cleaning, and loading sales da
 ```
 
 > **Note:** The `data/raw/` directory is excluded from version control to protect sensitive customer information. Please add your own raw CSV files to `data/raw/` to use this project.
+
 ## Getting Started
 
 ### Prerequisites
@@ -68,12 +71,23 @@ This project automates the process of extracting, cleaning, and loading sales da
     - Transform: `python src/transform.py`
     - Load: `python src/load.py`
 
-3. **Check the SQLite database** (created in the project root or as specified in your scripts).
+3. **Check the SQLite database** (created automatically).
 
-4. **Explore your data** using Jupyter notebooks in the `notebooks/` directory.
+4.  **Explore your data** using Jupyter notebooks in the `notebooks/` directory or run SQL queries using DB Browser for SQLite.
 
 ---
 
+## Example SQL Queries
+-- Total sales
+SELECT COUNT(*) FROM sales;
+
+-- Revenue by state
+SELECT State, SUM("Item price") AS revenue FROM sales GROUP BY State ORDER BY revenue DESC;
+
+-- Top 5 sales
+SELECT * FROM sales ORDER BY "Item price" DESC LIMIT 5;
+
+---
 ## Example Workflow
 
 Step 1: Extract data from CSVs  
