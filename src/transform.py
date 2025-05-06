@@ -78,7 +78,7 @@ class DataCleaner:
 
     def drop_sensitive(self):
         """ Drop sensitive columns"""
-        columns=['Name', 'Address Line 1', 'Address Line 2', 
+        columns=['Name', 'Buyer', 'Address Line 1', 'Address Line 2', 
                     'Estimated payout date', 'Payout arrival date'
         ]
         self.df = self.df.drop(columns = columns, errors='ignore')
