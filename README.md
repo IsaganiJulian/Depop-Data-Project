@@ -38,18 +38,18 @@ All sensitive customer information (names, usernames, addresses) has been remove
 
 ## Table of Contents
 
-1. [Project Structure](#project-structure)
-2. [ETL Pipeline](#etl-pipeline)
-3. [Data Analysis](#data-analysis)
-4. [Data Science](#data-science)
-5. [Dashboards](#dashboards)
-6. [Getting Started](#getting-started)
-7. [Usage](#usage)
-8. [Example SQL Queries](#example-sql-queries)
-9. [Example Workflow](#example-workflow)
-10. [Future Improvements](#future-improvements)
-11. [License](#license)
-12. [Author](#author)
+1. [Project Structure](#project-structure)  
+2. [ETL Pipeline](#etl-pipeline)  
+3. [Data Analysis](#data-analysis)  
+4. [Data Science](#data-science)  
+5. [Dashboards](#dashboards)  
+6. [SQL Queries](#sql-queries)  
+7. [Getting Started](#getting-started)  
+8. [Usage](#usage)  
+9. [Example Workflow](#example-workflow)  
+10. [Future Improvements](#future-improvements)  
+11. [License](#license)  
+12. [Author](#author)  
 
 ---
 ## Project Structure
@@ -65,6 +65,10 @@ All sensitive customer information (names, usernames, addresses) has been remove
 ├── data_science/
 │ ├── notebooks/ # ML modeling, feature engineering, evaluation
 │ └── reports/ # Model results & business insights
+├── sql/
+│ ├── eda/ # Exploratory Data Analysis queries
+│ ├── transform/ # Data cleaning and transformation queries
+│ └── reporting/ # Reporting/dashboard queries (for Tableau, etc.)
 ├── src/ # Python scripts (ETL pipeline)
 │ ├── extract.py
 │ ├── init.py
@@ -78,6 +82,49 @@ All sensitive customer information (names, usernames, addresses) has been remove
 > **Note:** The `data/raw/` directory is excluded from version control to protect sensitive customer information. Please add your own raw CSV files to `data/raw/` to use this project.
 
 ---
+
+## SQL Queries
+
+All SQL queries used in the project are organized in the `sql/` directory for clarity, reusability, and integration with Python and Tableau.
+
+- **`sql/eda/`**: Queries for exploratory data analysis (e.g., data overview, summary statistics, missing values).  
+- **`sql/transform/`**: Data cleaning and transformation queries (e.g., handling nulls, type conversions).  
+- **`sql/reporting/`**: Queries used for reporting and dashboards (e.g., revenue by state, top products).
+
+**Best Practices:**
+
+- Each query is saved in a separate, clearly-named `.sql` file.  
+- Queries include a commented header with a description, author, and last modified date.  
+- SQL code is formatted for readability and maintainability (keywords capitalized, each clause on a new line, meaningful aliases).
+
+**Example SQL file header:**
+-- File: eda_total_sales.sql
+-- Description: Returns the total number of sales in the sales table.
+-- Author: Isagani Hernandez
+-- Last Modified: 2025-05-08
+
+---
+### Using SQL Queries in Python
+
+You can load and execute queries from the `sql/` directory in your Python scripts or notebooks:
+
+with open('sql/eda/eda_total_sales.sql') as f:
+query = f.read()
+df = pd.read_sql_query(query, conn)
+
+---
+
+### Using SQL Queries in Tableau
+
+_Reporting queries for Tableau dashboards will be added as the project progresses._
+
+---
+
+## Example SQL Queries
+
+Below are examples of the types of queries stored in the `sql/` directory. For maintainability, use the actual `.sql` files in your workflow.
+
+
 
 ## ETL Pipeline
 
