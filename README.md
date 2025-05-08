@@ -1,8 +1,28 @@
-# Depop-ETL
+# Depop Data Analytics
+> **Note:** This project is a work in progress. Features, analysis, and documentation are being actively developed and improved.
+> 
+> **Last Updated:** May 8, 2025
+
+## Project Status
+
+- ✅ ETL Pipeline: Completed
+- 🔄 Data Analysis: In Progress
+- ⏳ Data Science (Modeling): Planned / Upcoming
+- 📊 Dashboards: Planned / Upcoming
+
+---
 
 ## Project Overview
 
-Depop-ETL is an automated data engineering pipeline for extracting, cleaning, and loading sales data from CSV files into a SQLite database. Designed for e-commerce analytics, the project streamlines the process of preparing raw sales data (such as from Depop) for robust, SQL-based analysis and reporting.
+Depop Data Analytics is a comprehensive, end-to-end data project built on real-world e-commerce sales data from Depop. This repository demonstrates the full data workflow, including:
+
+- **Automated ETL (Extract, Transform, Load):** Clean and structure raw sales data for robust, SQL-based analysis.
+- **Data Analysis & Visualization:** Explore, visualize, and report on sales trends, customer behavior, and business insights.
+- **Data Science:** Apply machine learning to solve business problems and generate predictive insights.
+
+All sensitive customer information (names, usernames, addresses) has been removed or anonymized to ensure privacy.
+
+---
 
 ## Features
 
@@ -11,19 +31,43 @@ Depop-ETL is an automated data engineering pipeline for extracting, cleaning, an
 - **Database Integration:** Loads cleaned data into a normalized SQLite database (`sales.db`), enabling efficient SQL queries and downstream analytics.
 - **Reproducible & Documented:** Modular code structure, clear documentation, and version control with Git for easy maintenance and collaboration.
 - **Analysis-Ready:** Supports Jupyter notebook-based exploration and reporting on the processed data.
+- **Data Analysis & Visualization:** Example notebooks and Tableau dashboards for exploring trends and generating insights.
+- **Data Science Workflows:** Notebooks for feature engineering, modeling, and evaluation.
+
+---
+
+## Table of Contents
+
+1. [Project Structure](#project-structure)
+2. [ETL Pipeline](#etl-pipeline)
+3. [Data Analysis](#data-analysis)
+4. [Data Science](#data-science)
+5. [Dashboards](#dashboards)
+6. [Getting Started](#getting-started)
+7. [Usage](#usage)
+8. [Example SQL Queries](#example-sql-queries)
+9. [Example Workflow](#example-workflow)
+10. [Future Improvements](#future-improvements)
+11. [License](#license)
+12. [Author](#author)
 
 ---
 ## Project Structure
 ```
+├── analysis/
+│ ├── notebooks/ # Jupyter notebooks for EDA & visualization
+│ └── reports/ # Analysis summary reports
 ├── config/ # Configuration files
-├── data/ # Data files
-│ ├── processed/
-│ └── raw/
-├── notebooks/ # Jupyter notebooks for exploration
-├── reports/ # Analysis reports or logs
+├── dashboards/ # Tableau or BI dashboards
+├── data/
+│ ├── processed/ # Cleaned, analysis-ready data
+│ └── raw/ # Raw Depop sales data (not included for privacy)
+├── data_science/
+│ ├── notebooks/ # ML modeling, feature engineering, evaluation
+│ └── reports/ # Model results & business insights
 ├── src/ # Python scripts (ETL pipeline)
-│ ├── init.py
 │ ├── extract.py
+│ ├── init.py
 │ ├── load.py
 │ └── transform.py
 ├── tests/ # Unit tests
@@ -32,6 +76,56 @@ Depop-ETL is an automated data engineering pipeline for extracting, cleaning, an
 ```
 
 > **Note:** The `data/raw/` directory is excluded from version control to protect sensitive customer information. Please add your own raw CSV files to `data/raw/` to use this project.
+
+---
+
+## ETL Pipeline
+
+**Goal:** Automate the cleaning and loading of raw Depop sales data into a structured SQLite database for downstream analysis.
+
+- Scripts in `src/` handle data extraction, cleaning, transformation, and loading.
+- Sensitive fields (buyer names, usernames, addresses) are removed or anonymized.
+- Output: Cleaned CSV and SQLite database in `data/processed/`.
+
+---
+
+## Data Analysis
+
+**Goal:** Explore and visualize sales data to uncover trends and actionable insights.
+
+- **Notebooks in `analysis/notebooks/`:**
+    - `01_eda.ipynb`: Data overview, summary statistics, missing values
+    - `02_sales_trends.ipynb`: Sales over time, by product, by region
+    - `03_customer_analysis.ipynb`: Customer segmentation and behavior
+- **Reports in `analysis/reports/`:**
+    - Summary of key findings and visualizations
+- **Automated Tableau Dashboard:**
+    - Interactive dashboard for business users (see [Dashboards](#dashboards) below)
+
+---
+
+## Data Science
+
+**Goal:** Apply machine learning to solve business problems and generate predictive insights.
+
+- **Notebooks in `data_science/notebooks/`:**
+    - `01_feature_engineering.ipynb`: Feature selection and creation
+    - `02_modeling.ipynb`: Model training (e.g., sales forecasting, customer segmentation)
+    - `03_evaluation.ipynb`: Model evaluation and interpretation
+    - `04_deployment.ipynb`: (Optional) Example of model deployment or scoring
+- **Reports in `data_science/reports/`:**
+    - Model performance, feature importance, and business recommendations
+
+---
+
+## Dashboards
+
+- **Tableau Dashboard:**  
+  [View Interactive Dashboard on Tableau Public](YOUR_TABLEAU_LINK_HERE)
+- Dashboard is automatically updated from the latest processed data.
+- Visualizes sales trends, product performance, and customer insights.
+
+---
 
 ## Getting Started
 
@@ -73,7 +167,7 @@ Depop-ETL is an automated data engineering pipeline for extracting, cleaning, an
 
 3. **Check the SQLite database** (created automatically).
 
-4.  **Explore your data** using Jupyter notebooks in the `notebooks/` directory or run SQL queries using DB Browser for SQLite.
+4.  **Explore your data** using Jupyter notebooks in the `analysis/notebooks/` or `notebooks/` directory, or run SQL queries using DB Browser for SQLite.
 
 ---
 
@@ -88,18 +182,6 @@ SELECT State, SUM("Item price") AS revenue FROM sales GROUP BY State ORDER BY re
 SELECT * FROM sales ORDER BY "Item price" DESC LIMIT 5;
 
 ---
-## Example Workflow
-
-Step 1: Extract data from CSVs  
-`python src/extract.py`
-
-Step 2: Transform/clean the data  
-`python src/transform.py`
-
-Step 3: Load cleaned data into SQLite  
-`python src/load.py`
-
----
 
 ## Future Improvements
 
@@ -107,6 +189,7 @@ Step 3: Load cleaned data into SQLite
 - Add logging and error handling
 - Schedule ETL jobs with cron or Airflow
 - Add data validation and unit tests
+- Expand data science models and business use cases
 
 ---
 
