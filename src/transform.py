@@ -1,4 +1,5 @@
 import pandas as pd
+import uuid
 
 # State mapping
 STATE_MAP = {
@@ -173,5 +174,8 @@ if __name__ == "__main__":
     .drop_duplicates()
     .get_data()
 )
+    # unique order ID
+    cleaned_df['order_id'] = [uuid.uuid4() for _ in range(len(cleaned_df))]
+    
     cleaned_df.to_csv("data/processed/cleaned.csv", index=False)
     print(cleaned_df.head())
