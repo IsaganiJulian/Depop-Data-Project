@@ -178,4 +178,6 @@ if __name__ == "__main__":
     cleaned_df['order_id'] = [uuid.uuid4() for _ in range(len(cleaned_df))]
     
     cleaned_df.to_csv("data/processed/cleaned.csv", index=False)
-    print(cleaned_df.head())
+    print(cleaned_df.info())
+
+    
