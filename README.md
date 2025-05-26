@@ -141,9 +141,7 @@ Below are examples of the types of queries stored in the `sql/` directory. For m
 **Goal:** Explore and visualize sales data to uncover trends and actionable insights.
 
 - **Notebooks in `analysis/notebooks/`:**
-    - `01_eda.ipynb`: Data overview, summary statistics, missing values
-    - `02_sales_trends.ipynb`: Sales over time, by product, by region
-    - `03_customer_analysis.ipynb`: Customer segmentation and behavior
+    - `01_eda.ipynb`: Data overview, summary statistics, missing values, sales trends
 - **Reports in `analysis/reports/`:**
     - Summary of key findings and visualizations
 - **Automated Tableau Dashboard:**
