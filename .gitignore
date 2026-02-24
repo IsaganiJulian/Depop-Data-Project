@@ -6,12 +6,22 @@ __pycache__/
 # Virtual environment
 venv/
 env/
+.venv/
 
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints
 
 # VSCode settings
 .vscode/
+
+# macOS / editor temp files
+.DS_Store
+*/.DS_Store
+._*
+*~
+*.swp
+*.swo
+.~*
 
 # Data and logs
 *.log

@@ -1,7 +1,7 @@
 # Depop Data Analytics
 > **Note:** This project is a work in progress. Features, analysis, and documentation are being actively developed and improved.
 > 
-> **Last Updated:** May 8, 2025
+> **Last Updated:** February 24, 2026
 
 ## Project Status
 
@@ -184,8 +184,8 @@ Below are examples of the types of queries stored in the `sql/` directory. For m
 
 1. **Clone the repository:**
     ```
-    git clone https://github.com/your-username/Depop-ETL.git
-    cd Depop-ETL
+    git clone https://github.com/IsaganiJulian/Depop-Data-Project.git
+    cd Depop-Data-Project
     ```
 
 2. **Create and activate a virtual environment (recommended):**
@@ -196,7 +196,7 @@ Below are examples of the types of queries stored in the `sql/` directory. For m
 
 3. **Install dependencies:**
     ```
-    pip install pandas
+    pip install -r requirements.txt
     ```
 
 ---
@@ -209,6 +209,7 @@ Below are examples of the types of queries stored in the `sql/` directory. For m
     - Extract: `python src/extract.py`
     - Transform: `python src/transform.py`
     - Load: `python src/load.py`
+    - End-to-end: `python src/pipeline.py`
 
 3. **Check the SQLite database** (created automatically).
 
