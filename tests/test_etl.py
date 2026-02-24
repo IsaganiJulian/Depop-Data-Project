@@ -6,6 +6,7 @@ import pandas as pd
 
 from src.extract import extract_data
 from src.transform import DataCleaner
+from src.quality import quality_checks
 
 
 class TestExtract(unittest.TestCase):
@@ -41,6 +42,46 @@ class TestTransform(unittest.TestCase):
 
         self.assertAlmostEqual(cleaned.loc[0, "US Sales tax"], 7.25)
         self.assertAlmostEqual(cleaned.loc[1, "US Sales tax"], 2.43)
+
+class TestQualityChecks(unittest.TestCase):
+    def test_valid_dataframe(self):
+        df = pd.DataFrame({
+            'Date of sale': ['2024-01-01'],
+            'Item price': [10],
+            'State': ['NY'],
+            'Total': [10],
+            'order_id': [1]
+        })
+        self.assertTrue(quality_checks(df))
+
+    def test_missing_column(self):
+        df = pd.DataFrame({
+            'Item price': [10],
+            'State': ['NY'],
+            'Total': [10],
+            'order_id': [1]
+        })
+        self.assertFalse(quality_checks(df))
+
+    def test_duplicate_order_id(self):
+        df = pd.DataFrame({
+            'Date of sale': ['2024-01-01', '2024-01-01'],
+            'Item price': [10, 10],
+            'State': ['NY', 'NY'],
+            'Total': [10, 10],
+            'order_id': [1, 1]
+        })
+        self.assertFalse(quality_checks(df))
+
+    def test_negative_item_price(self):
+        df = pd.DataFrame({
+            'Date of sale': ['2024-01-01'],
+            'Item price': [-5],
+            'State': ['NY'],
+            'Total': [10],
+            'order_id': [1]
+        })
+        self.assertFalse(quality_checks(df))
 
 
 if __name__ == "__main__":
