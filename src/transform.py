@@ -173,6 +173,7 @@ class DataCleaner:
             "US Sales tax",
             "Refunded to buyer amount",
             "Fees refunded to seller",
+            "Buyer Marketplace Fee",
         ]
         for col in numeric_cols:
             if col in self.df.columns:
