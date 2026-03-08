@@ -26,5 +26,8 @@ env/
 # Data and logs
 *.log
 *.sqlite3
-data/raw/
+*.db
 data/processed/
+
+# Raw CSVs contain buyer PII — stored in Supabase Storage, never committed.
+data/raw/

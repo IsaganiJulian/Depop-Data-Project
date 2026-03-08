@@ -3,7 +3,7 @@ import sys
 
 import pandas as pd
 
-from extract import write_combined_csv
+from extract import download_raw_files, write_combined_csv
 from load import load_to_supabase
 from transform import write_cleaned_csv
 from quality import quality_checks
@@ -22,6 +22,9 @@ _COMBINED_CSV = os.path.join(_REPO_ROOT, "data", "processed", "combined.csv")
 def run_pipeline() -> None:
     """Run full ETL pipeline end-to-end."""
     print("=== Depop ETL Pipeline starting ===")
+
+    # Download raw CSVs from Supabase Storage (never stored in git)
+    download_raw_files(raw_data_path=_RAW_DATA_PATH)
 
     # Extract
     write_combined_csv(raw_data_path=_RAW_DATA_PATH, output_path=_COMBINED_CSV)
