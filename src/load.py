@@ -1,3 +1,4 @@
+import json
 import os
 from pathlib import Path
 
@@ -81,11 +82,11 @@ def load_to_supabase(
             df["time_to_sell_days"], errors="coerce"
         ).astype("Int64")
 
-    # Replace NaN / NaT with None so records serialise to valid JSON
-    df = df.where(pd.notnull(df), other=None)
-
     client = _get_client()
-    records = df.to_dict(orient="records")
+
+    # Use pandas JSON encoder to safely convert NaN/NaT/Inf → null,
+    # then parse back to plain Python dicts for the Supabase client.
+    records = json.loads(df.to_json(orient="records", date_format="iso"))
     total = len(records)
 
     for start in range(0, total, BATCH_SIZE):
