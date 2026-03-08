@@ -32,6 +32,7 @@ COLUMN_MAP = {
     "US Sales tax":              "us_sales_tax",
     "Refunded to buyer amount":  "refunded_to_buyer_amount",
     "Fees refunded to seller":   "fees_refunded_to_seller",
+    "Buyer Marketplace Fee":     "buyer_marketplace_fee",
     "order_id":                  "order_id",
     "time_to_sell_days":         "time_to_sell_days",
 }
@@ -64,6 +65,10 @@ def load_to_supabase(
 
     # Rename to snake_case for Postgres / Power BI
     df = df.rename(columns=COLUMN_MAP)
+
+    # Drop any columns not in our schema so new Depop fields never break the load
+    known_cols = list(COLUMN_MAP.values())
+    df = df[[col for col in known_cols if col in df.columns]]
 
     # Serialise date columns to ISO strings (JSON-safe)
     for col in ("date_of_sale", "date_of_listing"):
