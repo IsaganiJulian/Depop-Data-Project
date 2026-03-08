@@ -1,21 +1,45 @@
+import os
+import sys
+
+import pandas as pd
+
 from extract import write_combined_csv
-from load import load_to_sqlite
+from load import load_to_supabase
 from transform import write_cleaned_csv
-from src.quality import quality_checks 
+from quality import quality_checks
+
+
+# ---------------------------------------------------------------------------
+# Paths — resolved relative to the repo root so the script can be invoked
+# from anywhere: `python src/pipeline.py` or `python -m src.pipeline`.
+# ---------------------------------------------------------------------------
+_REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+_CLEANED_CSV = os.path.join(_REPO_ROOT, "data", "processed", "cleaned.csv")
+_RAW_DATA_PATH = os.path.join(_REPO_ROOT, "data", "raw")
+_COMBINED_CSV = os.path.join(_REPO_ROOT, "data", "processed", "combined.csv")
+
 
 def run_pipeline() -> None:
     """Run full ETL pipeline end-to-end."""
-    write_combined_csv()
-    write_cleaned_csv()
-    df = pd.read_csv('../data/processed/cleaned.csv')  # Adjust path if needed
-    if quality_checks(df):  # Assume quality_checks returns True/False
-        load_to_sqlite()
-        print("ETL pipeline completed successfully.")
-    else:
-        print("Quality validation failed. Pipeline stopped.")
-    load_to_sqlite()
-   
-    print("ETL pipeline completed successfully.")
+    print("=== Depop ETL Pipeline starting ===")
+
+    # Extract
+    write_combined_csv(raw_data_path=_RAW_DATA_PATH, output_path=_COMBINED_CSV)
+
+    # Transform
+    write_cleaned_csv(input_path=_COMBINED_CSV, output_path=_CLEANED_CSV)
+
+    # Quality checks
+    df = pd.read_csv(_CLEANED_CSV)
+    if not quality_checks(df):
+        print("Quality validation FAILED. Pipeline stopped.")
+        sys.exit(1)
+
+    # Load
+    load_to_supabase(input_path=_CLEANED_CSV)
+
+    # Summary
+    print(f"=== Pipeline completed successfully — {len(df):,} rows loaded ===")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,92 @@
+name: Depop ETL Pipeline
+
+on:
+  # Run every day at midnight UTC
+  schedule:
+    - cron: '0 0 * * *'
+  # Run on every push to main
+  push:
+    branches:
+      - main
+  # Allow manual runs from the GitHub Actions tab (Actions → Run workflow)
+  workflow_dispatch:
+
+jobs:
+  etl:
+    name: Run ETL Pipeline
+    runs-on: ubuntu-latest
+
+    # -----------------------------------------------------------------------
+    # Secrets: add these in GitHub → Settings → Secrets and variables →
+    # Actions → New repository secret.
+    #   SUPABASE_URL      – your Supabase project URL
+    #   SUPABASE_KEY      – your Supabase service-role or anon key
+    #   DEPOP_USERNAME    – Depop account username / email
+    #   DEPOP_PASSWORD    – Depop account password
+    # If a secret is not yet set the variable will be an empty string, which
+    # is safe for the current local-file pipeline.
+    # -----------------------------------------------------------------------
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+      DEPOP_USERNAME: ${{ secrets.DEPOP_USERNAME }}
+      DEPOP_PASSWORD: ${{ secrets.DEPOP_PASSWORD }}
+
+    steps:
+      # ── 1. Source code ────────────────────────────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ── 2. Python runtime ─────────────────────────────────────────────────
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+          cache: 'pip'
+
+      # ── 3. Dependencies ───────────────────────────────────────────────────
+      - name: Install dependencies
+        run: pip install --upgrade pip && pip install -r requirements.txt
+
+      # ── 4. Pipeline execution ─────────────────────────────────────────────
+      - name: Run ETL pipeline
+        id: run_pipeline
+        run: |
+          set -o pipefail
+          python src/pipeline.py 2>&1 | tee pipeline.log
+
+      # ── 5. Summary (always runs so you see output on both pass and fail) ──
+      - name: Print pipeline summary
+        if: always()
+        run: |
+          echo "────────────────────────────────────────"
+          echo "          PIPELINE SUMMARY"
+          echo "────────────────────────────────────────"
+          grep -E "(Extracted|Wrote|loaded|rows|completed|FAILED|Quality|Null rate|Duplicate)" \
+            pipeline.log || echo "(no summary lines found)"
+          echo "────────────────────────────────────────"
+
+      # ── 6. Persist logs and database as downloadable artifacts ────────────
+      - name: Upload pipeline log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pipeline-log-${{ github.run_number }}
+          path: pipeline.log
+          retention-days: 30
+
+      - name: Upload SQLite database
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sales-db-${{ github.run_number }}
+          path: data/processed/sales.db
+          retention-days: 30
+
+      # ── 7. Failure notice ─────────────────────────────────────────────────
+      - name: Notify on failure
+        if: failure()
+        run: |
+          echo "::error title=ETL Pipeline Failed::The Depop ETL pipeline failed on run #${{ github.run_number }}."
+          echo "Check the 'pipeline-log-${{ github.run_number }}' artifact for details."
+          exit 1
